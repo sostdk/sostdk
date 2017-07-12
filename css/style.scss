@@ -1,0 +1,326 @@
+@import "bourbon/bourbon"; // http://bourbon.io/
+
+@import '../partials/variables'; // colors, fonts etc...
+
+@import '../partials/mixins'; // custom mixins
+
+@import '../partials/layout'; // responsive grid and media queries
+
+/* --------------------------------
+
+Primary style
+
+-------------------------------- */
+
+*, *::after, *::before {
+	@include box-sizing(border-box);
+}
+
+html, body {
+	height: 100%;
+}
+
+html {
+	font-size: 62.5%;
+}
+
+body {
+	font: {
+		size: 1.6rem;
+		family: $primary-font; // variables inside partials > _variables.scss
+	}
+	color: $color-1;
+	background-color: $color-3;
+
+	@include MQ(L) {
+		/* hide horizontal scroll bar in IE */
+		overflow-x: hidden;
+	}
+}
+
+a {
+	color: $color-2;
+	text-decoration: none;
+}
+
+/* --------------------------------
+
+Main Components
+
+-------------------------------- */
+
+.cd-header {
+	position: relative;
+	height: 100%;
+	background-color: #212121;
+	box-shadow: 0 4px 20px rgba(#000, .3);
+	z-index: 1;
+}
+
+.cd-fixed-background {
+	position: relative;
+	padding: 3em 5% 0;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+
+	h2, p {
+		color: $color-3;
+		@include font-smoothing;
+	}
+
+	h2 {
+		font-size: 2.4rem;
+		margin-bottom: 1em;
+	}
+
+	p {
+		line-height: 1.6;
+		font-family: $secondary-font;
+	}
+
+	.light-background h2, .light-background p {
+		color: $color-1;
+	}
+
+	.cd-content::after {
+		/* phone image on small devices */
+		content: '';
+		display: block;
+		width: 100%;
+		padding: 60% 0;
+		margin: 2em auto 0;
+	}
+
+	&.img-1 {
+		background-color: $color-5;
+
+		.cd-content::after {
+			background: url('../img/img-mobile-1.jpg') no-repeat;
+			background-size: 100% auto;
+		}
+	}
+
+	&.img-2 {
+		background-color: $color-3;
+
+		.cd-content::after {
+			background: url('../img/img-mobile-2.jpg') no-repeat;
+			background-size: 100% auto;
+		}
+	}
+
+	&.img-3 {
+		background-color: $color-1;
+
+		.cd-content::after {
+			background: url('../img/img-mobile-3.jpg') no-repeat;
+			background-size: 100% auto;
+		}
+	}
+
+
+	@include MQ(M) {
+		height: 100%;
+		padding: 0;
+
+		h2 {
+			font-size: 3.6rem;
+			font-weight: 300;
+		}
+
+		p {
+			font-size: 1.8rem;
+			line-height: 1.8;
+		}
+
+		.cd-content {
+			width: 50%;
+			position: absolute;
+			left: 5%;
+			@include center(y);
+		}
+
+		.cd-content::after {
+			display: none !important;
+		}
+
+		&.img-1 {
+			background-image: url('../img/img-1.jpg');
+		}
+
+		&.img-2 {
+			background-image: url('../img/img-2.jpg');
+		}
+
+		&.img-3 {
+			background-image: url('../img/img-3.jpg');
+		}
+
+	}
+
+	@include MQ(L) {
+		background-attachment: fixed;
+
+		.cd-content {
+			width: 40%;
+			left: 10%;
+		}
+	}
+}
+
+.cd-vertical-nav {
+	position: fixed;
+	z-index: 2;
+	right: 3%;
+	@include center(y);
+	display: none;
+
+	a {
+		display: block;
+		height: 40px;
+		width: 40px;
+		/* image replace */
+		overflow: hidden;
+		text-indent: 100%;
+		white-space: nowrap;
+
+		background: transparent url(../img/cd-icon-arrow.svg) no-repeat center center;
+		@include transition(opacity 0.2s 0s, visibility 0.2s 0s);
+
+		&.cd-prev {
+			@include transform(rotate(180deg));
+			margin-bottom: 10px;
+		}
+
+		&.inactive {
+			visibility: hidden;
+			opacity: 0;
+			@include transition(opacity 0.2s 0s, visibility 0s 0.2s);
+		}
+	}
+
+	@include MQ(XL) {
+		display: block;
+	}
+}
+
+.no-js .cd-vertical-nav {
+	display: none;
+}
+
+
+
+$items: 3;
+$animation-time: 4s;
+$transition-time: .5s;
+$scale: 20%;
+
+$total-time: ($animation-time * $items);
+$scale-base-1: (1 + $scale / 100%);
+
+.slideshow {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.slideshow-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: no-repeat 50% 50%;
+  background-size: cover;
+  animation-name: kenburns;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: $total-time;
+  opacity: 1;
+  transform: scale($scale-base-1);
+
+  @for $i from 1 through $items {
+    &:nth-child(#{$i}) {
+      animation-name: kenburns-#{$i};
+      z-index: ($items - $i);
+    }
+  }
+}
+
+@for $i from 1 through $items {
+  @keyframes kenburns-#{$i} {
+    $animation-time-percent: percentage($animation-time / $total-time);
+    $transition-time-percent: percentage($transition-time / $total-time);
+
+    $t1: ($animation-time-percent * ($i - 1) - $transition-time-percent / 2);
+    $t2: ($animation-time-percent * ($i - 1) + $transition-time-percent / 2);
+    @if($t1 < 0%) { $t1: 0%; }
+    @if($t2 < 0%) { $t2: 0%; }
+
+    $t3: ($animation-time-percent * ($i) - $transition-time-percent / 2);
+    $t4: ($animation-time-percent * ($i) + $transition-time-percent / 2);
+    @if($t3 > 100%) { $t3: 100%; }
+    @if($t4 > 100%) { $t4: 100%; }
+
+    $t5: (100% - $transition-time-percent / 2);
+    $t6: (($t4 - $t1) * 100% / $t5);
+
+    #{$t1} { opacity: 1; transform: scale($scale-base-1); }
+    #{$t2} { opacity: 1; }
+    #{$t3} { opacity: 1; }
+    #{$t4} { opacity: 0; transform: scale(1); }
+
+    @if($i != $items) {
+      100% { opacity: 0; transform: scale($scale-base-1); }
+    }
+
+    @if($i == 1) {
+      $scale-plus: ($scale * (100% - $t5) / $t4);
+      $scale-plus-base-1: (1 + ($scale + $scale-plus) / 100%);
+
+      #{$t5} { opacity: 0; transform: scale($scale-plus-base-1); }
+      100% { opacity: 1; }
+    }
+  }
+}
+
+
+// Presentational stuff
+h1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  z-index: 99;
+  text-align: center;
+  font-family: Raleway, sans-serif;
+  font-weight: 300;
+  text-transform: uppercase;
+  background-color: rgba(255,255,255,.75);
+  box-shadow: 0 1em 2em -1em rgba(0,0,0,.5);
+  padding: 1em 2em;
+  line-height: 1.5;
+
+	font-size: 2.2rem;
+	@include font-smoothing;
+	@include center;
+
+	color: #212121;
+
+
+  small {
+    display: block;
+    text-transform: lowercase;
+    font-size: .8em;
+
+    &:first-child {
+      border-bottom: 1px solid rgba(0,0,0,.25);
+      padding-bottom: .7em;
+    }
+
+    &:last-child {
+      border-top: 1px solid rgba(0,0,0,.25);
+      padding-top: .7em;
+    }
+  }
+}

@@ -1,14 +1,16 @@
-@import "bourbon/bourbon"; // http://bourbon.io/
+@import "reset"; // Lets reset this fuckar
 
-@import '../partials/variables'; // colors, fonts etc...
+@import "bourbon/bourbon"; // http://bourbon.io/ cause bourbon i need...
 
-@import '../partials/mixins'; // custom mixins
+@import '../partials/variables'; // Read, Green, Blue and fuck Alpha
 
-@import '../partials/layout'; // responsive grid and media queries
+@import '../partials/mixins'; // MY SHIT - DONT TOUCH
+
+@import '../partials/layout'; // Mobiles, tablets, desktops, toasters...
 
 /* --------------------------------
 
-Primary style
+Style n' shit goes beyond this point...
 
 -------------------------------- */
 
@@ -33,7 +35,7 @@ body {
 	background-color: $color-3;
 
 	@include MQ(L) {
-		/* hide horizontal scroll bar in IE */
+		/* Hide the fucking scroll bare in the X axis on IE! Cause fuck IE! */
 		overflow-x: hidden;
 	}
 }
@@ -45,7 +47,7 @@ a {
 
 /* --------------------------------
 
-Main Components
+Boxing and aother main shit
 
 -------------------------------- */
 
@@ -247,7 +249,7 @@ $scale-base-1: (1 + $scale / 100%);
   }
 }
 
-@for $i from 1 through $items {
+@for $i from 1 through $items { // Please don't touch forloop
   @keyframes kenburns-#{$i} {
     $animation-time-percent: percentage($animation-time / $total-time);
     $transition-time-percent: percentage($transition-time / $total-time);
@@ -285,7 +287,137 @@ $scale-base-1: (1 + $scale / 100%);
 }
 
 
-// Presentational stuff
+//EXPANDING NAVIGATION
+#expNav {
+	position:fixed;
+	top: 0; left: 0;
+	z-index: 9999999999; // > Must always be on top of everything
+	width:50px;height:50px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 100%;
+	border-bottom-left-radius: 100%;
+	border-bottom-right-radius: 100%;
+	background-color:transparent;
+	-webkit-transition: all 600ms cubic-bezier(0.785, 0.135, 0.15, 0.86);
+  transition:         all 600ms cubic-bezier(0.785, 0.135, 0.15, 0.86);
+}
+#expNav.active {
+	position:fixed;
+	top: 0; left: 0;
+	z-index: 9999999999; // > Must always be on top of everything
+	width:100vw;height:100vh;
+	border-radius: 0;
+	background-color:rgba(255,255,255,1);
+	margin:0;
+
+}
+
+#expContent {
+	display:none;
+	position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+
+	ul {
+		width:50vw;
+		a {
+			li {
+				padding: 25px 0;
+				text-align: center;
+				transition: all .2s;
+				color:#212121;
+				display:inline;
+				float:left;
+				width:50%;
+
+				&:hover {
+					background-color:rgba(0,0,0,0.1);
+				}
+
+				@include MQ(S){ width:50% }
+				@include MQ(SMax){ width:100% }
+
+			}
+		}
+	}
+
+}
+#expContent.visible {
+	display:block;
+}
+
+.menu-icon {
+  position: relative;
+  top: 5vw;left: 5vw;
+  display: block;
+  width: 4em;
+  height: 4em;
+  cursor: pointer;
+  -webkit-transition: all 0.3s;
+	        transition: all 0.3s;
+}
+
+.menu-icon > span {
+  position: absolute;
+  top: 50%;
+  display: block;
+  width: 100%;
+  height: 0.5em;
+  margin-top: -0.5em;
+  background-color: #fff;
+  border-radius: 3px;
+}
+
+.menu-icon > span:before,
+.menu-icon > span:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 3px;
+  -webkit-transition: all 0.3s;
+	        transition: all 0.3s;
+}
+
+.menu-icon > span:before {
+  -webkit-transform: translateY(-1em);
+	        transform: translateY(-1em);
+}
+
+.menu-icon > span:after {
+  -webkit-transform: translateY(1em);
+	        transform: translateY(1em);
+}
+
+/* OPENED */
+
+.menu-icon.open {
+  -webkit-transform: rotate(45deg);
+	        transform: rotate(45deg);
+
+		span {
+			background-color: #212121;
+			&:before { background-color: #212121; }
+			&:after { background-color: #212121; }
+		}
+}
+
+.menu-icon.open > span:before {
+  -webkit-transform: rotate(90deg);
+	        transform: rotate(90deg);
+}
+
+.menu-icon.open > span:after {
+  -webkit-transform: rotate(90deg);
+	        transform: rotate(90deg);
+}
+
+
+
+// Site style stuffing birds with big wings and shitdazzle
+//If you've read this, you have come too far in my code... Just saying
 h1 {
   position: absolute;
   top: 50%;
@@ -297,7 +429,8 @@ h1 {
   font-weight: 300;
   text-transform: uppercase;
   background-color: rgba(255,255,255,.75);
-  box-shadow: 0 1em 2em -1em rgba(0,0,0,.5);
+  box-shadow: 0 16px 24px 2px rgba(0,0,0,0.14), 0 6px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.3);
+	border-radius: 2px;
   padding: 1em 2em;
   line-height: 1.5;
 
@@ -312,6 +445,8 @@ h1 {
     display: block;
     text-transform: lowercase;
     font-size: .8em;
+
+		a { font-weight: 400; color:#2c3e50; border-bottom: 1px solid #212121;}
 
     &:first-child {
       border-bottom: 1px solid rgba(0,0,0,.25);

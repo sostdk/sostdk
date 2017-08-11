@@ -1,4 +1,15 @@
 jQuery(document).ready(function($){
+
+	$('#expNav').on('click', function() {
+  	$(this).toggleClass('active');
+  	$('#expContent').toggleClass('visible');
+	});
+
+	var button = document.querySelector('.menu-icon');
+	button.addEventListener('click', function (){
+	  button.classList.toggle('open');
+	});
+
 	var animating = false;
 
 	//update arrows visibility and detect which section is visible in the viewport
